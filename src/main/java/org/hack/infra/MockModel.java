@@ -5,21 +5,24 @@ import org.hack.domain.ModelLoader;
 import org.hack.domain.bean.ModelIn;
 import org.hack.domain.bean.ModelOut;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+@Primary
 @Component
 @Slf4j
 public class MockModel implements ModelLoader {
 
     private List<ModelOut> modelOut;
 
-    public MockModel(@Value("${mock.file}") String mockPath) {
+    public MockModel(@Value("classpath:d.csv") Resource r) {
         try {
-            modelOut = ModelReader.read(new File(mockPath));
+            modelOut = ModelReader.read(r);
         } catch (IOException ioe) {
             log.info("Echec dde lecture du fichier de mock", ioe);
         }

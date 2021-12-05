@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class ModelOut {
     private double rendement;
-    private double matierSeche;
-    private double matiereSecheTheorique;
+    private double matiereSeche;
+    //private double matiereSecheTheorique;
 }
