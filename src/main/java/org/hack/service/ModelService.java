@@ -4,18 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.hack.domain.ModelLoader;
 import org.hack.domain.ModelModifier;
 import org.hack.domain.TownSearch;
-import org.hack.domain.bean.Message;
-import org.hack.domain.bean.ModelIn;
-import org.hack.domain.bean.ModelOut;
-import org.hack.domain.bean.Previsions;
+import org.hack.domain.bean.*;
 import org.hack.infra.AleaLoader;
 import org.hack.infra.CallAlan;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -46,6 +40,14 @@ public class ModelService {
 
         return modifier.alter(modifier.alter(loader.getData(new ModelIn()), getDay(firstDay), getDay(lastDay), intensity), getDay(firstDay2), getDay(lastDay2), intensity2);
     }
+
+    @PostMapping(value = "/api/model", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ModelOut> call(@RequestBody List<Sinister> sinisters) {
+        List<ModelOut> result = loader.getData(new ModelIn());
+        sinisters.stream().forEach(sin -> modifier.alter(result, sin.getFirstDay().get(Calendar.DAY_OF_YEAR), sin.getLastDay().get(Calendar.DAY_OF_YEAR), sin.getIntensity()));
+        return result;
+    }
+
 
     private int getDay(Date d) {
         Calendar c = Calendar.getInstance();
