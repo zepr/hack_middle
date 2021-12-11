@@ -44,7 +44,9 @@ public class ModelService {
     @PostMapping(value = "/api/model", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ModelOut> call(@RequestBody List<Sinister> sinisters) {
         List<ModelOut> result = loader.getData(new ModelIn());
-        sinisters.stream().forEach(sin -> modifier.alter(result, sin.getFirstDay().get(Calendar.DAY_OF_YEAR), sin.getLastDay().get(Calendar.DAY_OF_YEAR), sin.getIntensity()));
+        for (Sinister sin : sinisters) {
+            result = modifier.alter(result, sin.getFirstDay().get(Calendar.DAY_OF_YEAR), sin.getLastDay().get(Calendar.DAY_OF_YEAR), sin.getIntensity());
+        }
         return result;
     }
 
